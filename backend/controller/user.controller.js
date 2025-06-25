@@ -7,7 +7,7 @@ dotenv.config();
 
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword, role } = req.body;
 
     // ✅ Check if passwords match
     if (password !== confirmPassword) {
@@ -28,14 +28,15 @@ exports.signup = async (req, res) => {
     const newUser = new User({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role
     });
 
     await newUser.save();
 
     // ✅ Generate JWT
     const token = jwt.sign(
-      { id: newUser._id, email: newUser.email },
+      { id: newUser._id, role: newUser.role },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || "7d" } // fallback to 1 day
     );
@@ -48,7 +49,8 @@ exports.signup = async (req, res) => {
       user: {
         id: newUser._id,
         name: newUser.name,
-        email: newUser.email
+        email: newUser.email,
+        role: newUser.role
       }
     });
   } catch (error) {
@@ -74,7 +76,7 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
@@ -85,7 +87,8 @@ exports.login = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     });
   } catch (error) {
