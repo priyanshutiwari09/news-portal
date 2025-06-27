@@ -136,7 +136,7 @@ exports.summarize = async (req, res) => {
 
   try {
     const response = await axios.post(
-      "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+      "https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6",
       {
         inputs: content
       },
