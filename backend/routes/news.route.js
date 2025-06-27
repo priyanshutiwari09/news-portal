@@ -6,7 +6,7 @@ const checkRole = require('../middleware/checkRole.js')
 const router = express.Router();
 
 router.post('/createNews', verifyToken.protect, checkRole("admin"), newsController.createNews);
-
+router.post('/:id/summarize', newsController.summarize);
 // ✅ keep specific routes BEFORE dynamic ones
 router.get('/my-news', verifyToken.protect, checkRole('admin'), newsController.getMyNews);
 router.get('/', newsController.getAllNews);

@@ -1,4 +1,12 @@
+// const { model } = require("mongoose");
 const News = require("../models/news.model");
+const dotenv = require("dotenv");
+dotenv.config();
+// const OpenAI = require("openai");
+// const client = new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY
+// });
+const axios = require("axios");
 
 exports.createNews = async (req, res) => {
   const { title, subTitle, content, category, imageUrl } = req.body;
@@ -116,5 +124,40 @@ exports.deleteNews = async (req, res) => {
     res.json({ message: "News Deleted" });
   } catch (err) {
     res.status(500).json({ message: "Delete failed", error: err.message });
+  }
+};
+
+const HUGGINGFACE_API_KEY = process.env.HUGGINGFACE_TOKEN;
+
+exports.summarize = async (req, res) => {
+  const { content } = req.body;
+
+  if (!content) return res.status(400).json({ error: "No content provided" });
+
+  try {
+    const response = await axios.post(
+      "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+      {
+        inputs: content
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("📦 Hugging Face response:", response.data);
+
+    if (!Array.isArray(response.data) || !response.data[0]?.summary_text) {
+      console.error("Unexpected response format:", response.data);
+      return res.status(500).json({ error: "Unexpected summarization format" });
+    }
+
+    return res.json({ summary: response.data[0].summary_text });
+  } catch (err) {
+    console.error("❌ API Error:", err.response?.data || err);
+    return res.status(500).json({ error: "Summarization failed" });
   }
 };
