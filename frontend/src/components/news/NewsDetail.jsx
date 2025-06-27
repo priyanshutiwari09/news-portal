@@ -7,13 +7,19 @@ const NewsDetail = () => {
   const [news, setNews] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [utterance, setUtterance] = useState(null);
+
+  // ✅ For summarization
+  const [summary, setSummary] = useState("");
+  const [summarizing, setSummarizing] = useState(false);
+  const [alreadySummarized, setAlreadySummarized] = useState(false);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const res = await axios.get(`http://localhost:5000/news/${id}`);
         setNews(res.data);
-        // console.log(res.data);
       } catch (err) {
         setError("Failed to load news item.");
         console.log(err);
@@ -24,6 +30,41 @@ const NewsDetail = () => {
 
     fetchNews();
   }, [id]);
+
+  const handlePlay = () => {
+    if (!news || isPlaying) return;
+    const newUtterance = new SpeechSynthesisUtterance(news.content);
+    newUtterance.onend = () => setIsPlaying(false);
+    window.speechSynthesis.speak(newUtterance);
+    setUtterance(newUtterance);
+    setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    window.speechSynthesis.cancel();
+    setIsPlaying(false);
+  };
+
+  // ✅ Summarize handler
+  const handleSummarize = async () => {
+    if (alreadySummarized || summarizing) return;
+
+    setSummarizing(true);
+    try {
+      const res = await axios.post(
+        `http://localhost:5000/news/${id}/summarize`,
+        {
+          content: news.content
+        }
+      );
+      setSummary(res.data.summary);
+      setAlreadySummarized(true);
+    } catch (err) {
+      console.error("Summarization failed", err);
+    } finally {
+      setSummarizing(false);
+    }
+  };
 
   if (loading) return <p className="text-center p-6">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -57,9 +98,17 @@ const NewsDetail = () => {
               })}
             </p>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
             <button className="text-blue-600 hover:underline">Share</button>
             <button className="text-blue-600 hover:underline">Bookmark</button>
+            <button
+              onClick={isPlaying ? handleStop : handlePlay}
+              className={`text-blue-600 hover:underline ${
+                isPlaying ? "text-red-600" : ""
+              }`}
+            >
+              {isPlaying ? "⏹ Stop" : "🔊 Play"}
+            </button>
           </div>
         </div>
 
@@ -77,6 +126,28 @@ const NewsDetail = () => {
         {/* Content */}
         <div className="text-gray-700 leading-relaxed text-base whitespace-pre-line">
           {news.content}
+        </div>
+
+        {/* Summarize Section */}
+        <div className="mt-6 space-y-4">
+          <button
+            onClick={handleSummarize}
+            disabled={alreadySummarized || summarizing}
+            className={`px-4 py-2 rounded text-white ${
+              alreadySummarized || summarizing
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
+          >
+            {summarizing ? "Summarizing..." : "🧠 Summarize Article"}
+          </button>
+
+          {summary && (
+            <div className="bg-gray-100 border border-gray-300 p-4 rounded">
+              <h2 className="font-semibold text-gray-800 mb-2">📝 Summary:</h2>
+              <p className="text-gray-700">{summary}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
