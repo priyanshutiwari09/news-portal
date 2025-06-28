@@ -38,6 +38,7 @@ const CreateNews = () => {
         {
           title: data.title,
           subTitle: data.subtitle,
+          content: data.article,
           imageUrl: data.image,
           category: data.category,
           article: data.article
