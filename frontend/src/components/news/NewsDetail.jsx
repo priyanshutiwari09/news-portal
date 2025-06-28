@@ -47,6 +47,28 @@ const NewsDetail = () => {
     setIsPlaying(false);
   };
 
+  // Share
+  const handleShare = async () => {
+    if (!news) return;
+
+    const shareData = {
+      title: news.title,
+      text: news.subTitle || "Check out this news article!",
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        console.log("Shared successfully");
+      } else {
+        alert("Sharing not supported in this browser.");
+      }
+    } catch (err) {
+      console.error("Error sharing:", err);
+    }
+  };
+
   // ✅ Summarize handler
   const handleSummarize = async () => {
     if (alreadySummarized || summarizing) return;
@@ -102,13 +124,18 @@ const NewsDetail = () => {
               </p>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="text-blue-600 hover:underline">Share</button>
+              <button
+                onClick={handleShare}
+                className="text-blue-600 cursor-pointer hover:underline"
+              >
+                Share
+              </button>
               <button className="text-blue-600 hover:underline">
                 Bookmark
               </button>
               <button
                 onClick={isPlaying ? handleStop : handlePlay}
-                className={`text-blue-600 hover:underline ${
+                className={`text-blue-600 cursor-pointer hover:underline ${
                   isPlaying ? "text-red-600" : ""
                 }`}
               >
@@ -138,7 +165,7 @@ const NewsDetail = () => {
             <button
               onClick={handleSummarize}
               disabled={alreadySummarized || summarizing}
-              className={`px-4 py-2 rounded text-white ${
+              className={`px-4 py-2 rounded cursor-pointer text-white ${
                 alreadySummarized || summarizing
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-indigo-600 hover:bg-indigo-700"

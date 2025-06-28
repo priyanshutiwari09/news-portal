@@ -24,25 +24,37 @@ function Layout() {
   const hideLayout =
     location.pathname === "/login" ||
     location.pathname === "/SignUp" ||
-    location.pathname == "/CreateNews";
+    location.pathname === "/CreateNews";
 
   return (
-    <>
-      {!hideLayout && <NavBar />}
-      {!hideLayout && <Menus />}
+    <div className="flex flex-col h-screen overflow-hidden">
+      {/* Sticky Navbar */}
+      {!hideLayout && (
+        <div className="sticky top-0 z-50">
+          <NavBar />
+        </div>
+      )}
 
-      <Routes>
-        <Route path="/" element={<NewsList />} />
-        <Route path="/news/:id" element={<NewsDetail />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/CreateNews" element={<CreateNews />} />
-        <Route path="/MyNews" element={<MyNews />} />
-        <Route path="/edit/:id" element={<EditNews />} />
-      </Routes>
+      {/* Sticky Menus */}
+      {!hideLayout && (
+        <div className="sticky top-[4rem] z-40">
+          <Menus />
+        </div>
+      )}
 
-      {/* {!hideLayout && <Footer />} */}
-    </>
+      {/* Scrollable content area */}
+      <div className="flex-1 overflow-y-auto">
+        <Routes>
+          <Route path="/" element={<NewsList />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/CreateNews" element={<CreateNews />} />
+          <Route path="/MyNews" element={<MyNews />} />
+          <Route path="/edit/:id" element={<EditNews />} />
+        </Routes>
+      </div>
+    </div>
   );
 }
 
