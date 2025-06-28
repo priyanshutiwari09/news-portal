@@ -41,7 +41,7 @@ function Layout() {
         <Route path="/edit/:id" element={<EditNews />} />
       </Routes>
 
-      {!hideLayout && <Footer />}
+      {/* {!hideLayout && <Footer />} */}
     </>
   );
 }

@@ -84,14 +84,15 @@ const CreateNews = () => {
           {/* subtitle */}
           <div className="mb-4">
             <label className="block mb-1 text-sm font-medium">Sub Title</label>
-            <input
+            <textarea
+            rows={2}
               type="text"
               {...register("subtitle", {
                 required: "Sub Title is required"
               })}
               className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholder="Enter Sub Title"
-            />
+            ></textarea>
             {errors.text && (
               <p className="text-sm text-red-500 mt-1">{errors.text.message}</p>
             )}
@@ -101,18 +102,21 @@ const CreateNews = () => {
             <label className="block mb-1 text-sm font-medium">
               News Article
             </label>
-            <input
-              type="text"
+            <textarea
+              rows={6}
               {...register("article", {
                 required: "News Article is required"
               })}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 border rounded resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholder="Enter News Article"
-            />
-            {errors.text && (
-              <p className="text-sm text-red-500 mt-1">{errors.text.message}</p>
+            ></textarea>
+            {errors.article && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.article.message}
+              </p>
             )}
           </div>
+
           {/* category */}
           <div className="mb-4">
             <label className="block mb-1 text-sm font-medium">
