@@ -129,35 +129,33 @@ exports.deleteNews = async (req, res) => {
 
 const HUGGINGFACE_API_KEY = process.env.HUGGINGFACE_TOKEN;
 
+// controllers/newsController.js
 exports.summarize = async (req, res) => {
   const { content } = req.body;
 
   if (!content) return res.status(400).json({ error: "No content provided" });
 
   try {
+    // ✅ Define the variable before using
+    const trimmedContent = content.slice(0, 1000); // Optional limit to avoid timeout
+
     const response = await axios.post(
-      "https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6",
+      "https://api-inference.huggingface.co/models/Falconsai/text_summarization",
       {
-        inputs: content
+        inputs: trimmedContent
       },
       {
         headers: {
-          Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
-          "Content-Type": "application/json"
-        }
+          Authorization: `Bearer ${HUGGINGFACE_API_KEY}` // replace this
+        },
+        timeout: 30000 // optional
       }
     );
 
-    console.log("📦 Hugging Face response:", response.data);
-
-    if (!Array.isArray(response.data) || !response.data[0]?.summary_text) {
-      console.error("Unexpected response format:", response.data);
-      return res.status(500).json({ error: "Unexpected summarization format" });
-    }
-
-    return res.json({ summary: response.data[0].summary_text });
+    const summary = response.data[0]?.summary_text || "No summary returned.";
+    res.json({ summary });
   } catch (err) {
-    console.error("❌ API Error:", err.response?.data || err);
-    return res.status(500).json({ error: "Summarization failed" });
+    console.error("❌ API Error:", err.response?.data || err.message);
+    res.status(500).json({ error: "Summarization failed" });
   }
 };
