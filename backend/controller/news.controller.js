@@ -7,11 +7,14 @@ dotenv.config();
 //   apiKey: process.env.OPENAI_API_KEY
 // });
 const axios = require("axios");
+// controller/news.controller.js
+const cloudinary = require("../utils/cloudinary.js");
 
 exports.createNews = async (req, res) => {
-  const { title, subTitle, content, category, imageUrl } = req.body;
+  const { title, subTitle, content, category } = req.body;
 
   try {
+    const imageUrl = req.file?.path; // Cloudinary returns full URL
     const news = new News({
       title,
       subTitle,
@@ -78,27 +81,28 @@ exports.getNewsById = async (req, res) => {
 exports.updateNews = async (req, res) => {
   try {
     const news = await News.findById(req.params.id);
+    if (!news) return res.status(404).json({ message: "News not found" });
 
-    if (!news) {
-      return res.status(404).json({ message: "News not found" });
+    if (news.createdBy.toString() !== req.user.id)
+      return res.status(403).json({ message: "Unauthorized" });
+
+    const { title, subTitle, category, content } = req.body;
+
+    let imageUrl = news.imageUrl;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "mern-news"
+      });
+      imageUrl = result.secure_url;
     }
-
-    if (news.createdBy.toString() !== req.user.id) {
-      return res
-        .status(403)
-        .json({ message: "You can only update your own news" });
-    }
-
-    const { title, subTitle, category, content, imageUrl } = req.body;
 
     news.title = title || news.title;
     news.subTitle = subTitle || news.subTitle;
     news.category = category || news.category;
     news.content = content || news.content;
-    news.imageUrl = imageUrl || news.imageUrl;
+    news.imageUrl = imageUrl;
 
     await news.save();
-
     res.json({ message: "News Updated", news });
   } catch (err) {
     res.status(400).json({ message: "Update Failed", error: err.message });
