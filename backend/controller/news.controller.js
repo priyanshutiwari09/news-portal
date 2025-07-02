@@ -33,19 +33,35 @@ exports.createNews = async (req, res) => {
 
 exports.getAllNews = async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category, page = 1, limit = 10 } = req.query;
 
     const filter = category ? { category } : {};
 
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(limit);
+    const skip = (pageNumber - 1) * limitNumber;
+
+    // Total count for pagination
+    const totalCount = await News.countDocuments(filter);
+
+    // Get paginated news
     const news = await News.find(filter)
       .populate("createdBy", "name role")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNumber);
 
-    res.status(200).json(news);
+    const totalPages = Math.ceil(totalCount / limitNumber);
+
+    res.status(200).json({
+      news,
+      totalPages
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch news", error: err.message });
+    res.status(500).json({
+      message: "Failed to fetch news",
+      error: err.message
+    });
   }
 };
 
