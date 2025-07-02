@@ -16,6 +16,12 @@ import NewsList from "./components/news/NewsList";
 import CreateNews from "./components/news/CreateNews";
 import MyNews from "./components/news/MyNews";
 import EditNews from "./components/news/EditNews";
+import About from "./components/layout/About";
+import Contact from "./components/layout/Contact";
+import Advertise from "./components/layout/Advertise";
+import Terms from "./components/layout/Terms";
+import Privacy from "./components/layout/Privacy";
+import Cookies from "./components/layout/Cookies";
 
 // import "mdb-react-ui-kit/dist/css/mdb.min.css";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -52,6 +58,12 @@ function Layout() {
           <Route path="/CreateNews" element={<CreateNews />} />
           <Route path="/MyNews" element={<MyNews />} />
           <Route path="/edit/:id" element={<EditNews />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/advertise" element={<Advertise />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/cookies" element={<Cookies />} />
         </Routes>
       </div>
     </div>

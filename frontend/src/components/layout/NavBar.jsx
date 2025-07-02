@@ -43,9 +43,12 @@ const NavBar = () => {
             <li className="hover:cursor-pointer hover:bg-gray-300 hover:rounded-sm p-1">
               Portfolio
             </li>
-            <li className="hover:cursor-pointer hover:bg-gray-300 hover:rounded-sm p-1">
+            <Link
+              to="/about"
+              className="hover:cursor-pointer hover:bg-gray-300 hover:rounded-sm p-1"
+            >
               About
-            </li>
+            </Link>
             {token && user?.role == "admin" ? (
               <>
                 <Link
@@ -85,8 +88,17 @@ const NavBar = () => {
         </div>
       </div>
       <div className="lg:navbar-center">
-        <a className="text-black font-bold text-3xl">Last24Hrs</a>
+        <div className="flex items-center text-black font-bold text-3xl">
+          <span>Last</span>
+          <img
+            src="/logo.png"
+            alt="Last24Hrs Logo"
+            className="w-14 h-auto object-contain"
+          />
+          <span>Hrs</span>
+        </div>
       </div>
+
       <div className="hidden lg:navbar-end lg:flex lg:gap-2">
         {token ? (
           <div
