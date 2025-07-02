@@ -5,21 +5,34 @@ const useNewsStore = create((set, get) => ({
   news: [],
   loading: false,
   error: null,
-  category: "", // ✅ NEW state
+  category: "",
+  page: 1,
+  totalPages: 1,
 
-  setCategory: (cat) => set({ category: cat }),
+  // ✅ Set category and reset to first page
+  setCategory: (cat) => set({ category: cat, page: 1 }),
 
+  // ✅ Set page for pagination
+  setPage: (page) => set({ page }),
+
+  // ✅ Fetch news using page, limit and category
   fetchNews: async () => {
-    const { category } = get();
+    const { category, page } = get();
     set({ loading: true, error: null });
 
     try {
-      const res = await axios.get(
-        category
-          ? `http://localhost:5000/news?category=${category}`
-          : `http://localhost:5000/news`
-      );
-      set({ news: res.data });
+      const res = await axios.get("http://localhost:5000/news", {
+        params: {
+          category: category || undefined,
+          page,
+          limit: 10,
+        },
+      });
+
+      set({
+        news: res.data.news,
+        totalPages: res.data.totalPages || 1,
+      });
     } catch (err) {
       set({ error: "Failed to fetch news." });
     } finally {
