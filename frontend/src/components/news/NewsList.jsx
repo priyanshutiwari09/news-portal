@@ -4,15 +4,8 @@ import NewsCard from "./NewsCard.jsx";
 import Footer from "../layout/Footer.jsx";
 
 const NewsList = () => {
-  const {
-    news,
-    fetchNews,
-    loading,
-    error,
-    page,
-    totalPages,
-    setPage,
-  } = useNewsStore();
+  const { news, fetchNews, loading, error, page, totalPages, setPage } =
+    useNewsStore();
 
   useEffect(() => {
     fetchNews(); // runs when page changes
@@ -57,7 +50,7 @@ const NewsList = () => {
           <button
             onClick={() => setPage(Math.max(page - 1, 1))}
             disabled={page === 1}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 hover:cursor-pointer disabled:opacity-50"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
           >
             ⬅️ Previous
           </button>
@@ -69,7 +62,7 @@ const NewsList = () => {
           <button
             onClick={() => setPage(Math.min(page + 1, totalPages))}
             disabled={page === totalPages}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 hover:cursor-pointer disabled:opacity-50"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
           >
             Next ➡️
           </button>

@@ -30,6 +30,7 @@ const EditNews = () => {
         setValue("subTitle", subTitle);
         setValue("content", content);
         setValue("category", category);
+        setValue("imageUrl", imageUrl);
         setPreviewImage(imageUrl);
       } catch (err) {
         console.error(err);
@@ -42,42 +43,26 @@ const EditNews = () => {
     fetchNews();
   }, [id, setValue]);
 
-  const handleImageUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "your_unsigned_preset"); // Replace with your Cloudinary unsigned preset
-
-    const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload", // Replace with your cloud name
-      formData
-    );
-
-    return res.data.secure_url;
-  };
-
   const onSubmit = async (data) => {
     try {
-      let imageUrl = previewImage;
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("subTitle", data.subTitle);
+      formData.append("category", data.category);
+      formData.append("content", data.content);
 
-      if (data.image[0]) {
-        imageUrl = await handleImageUpload(data.image[0]);
+      if (data.image && data.image[0]) {
+        formData.append("image", data.image[0]);
+      } else if (data.imageUrl && data.imageUrl.trim()) {
+        formData.append("imageUrl", data.imageUrl.trim());
       }
 
-      await axios.put(
-        `http://localhost:5000/news/${id}`,
-        {
-          title: data.title,
-          subTitle: data.subTitle,
-          content: data.content,
-          category: data.category,
-          imageUrl
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+      await axios.put(`http://localhost:5000/news/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data"
         }
-      );
+      });
 
       navigate("/MyNews");
     } catch (err) {
@@ -159,16 +144,37 @@ const EditNews = () => {
             accept="image/*"
             {...register("image")}
             className="file-input file-input-bordered w-full"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                setPreviewImage(URL.createObjectURL(file));
+              }
+            }}
           />
-          {previewImage && (
-            <img
-              src={previewImage}
-              alt="Preview"
-              className="w-40 h-28 object-cover mt-2 rounded"
-            />
-          )}
         </div>
 
+        {/* Image URL Input */}
+        <div>
+          <label className="label">Or paste Image URL</label>
+          <input
+            type="text"
+            {...register("imageUrl")}
+            placeholder="https://example.com/image.jpg"
+            className="input input-bordered w-full"
+            onChange={(e) => setPreviewImage(e.target.value)}
+          />
+        </div>
+
+        {/* Preview Image */}
+        {previewImage && (
+          <img
+            src={previewImage}
+            alt="Preview"
+            className="w-40 h-28 object-cover mt-2 rounded"
+          />
+        )}
+
+        {/* Buttons */}
         <div className="flex justify-end gap-3">
           <button
             type="button"

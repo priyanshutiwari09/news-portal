@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -17,13 +17,21 @@ const CreateNews = () => {
     watch
   } = useForm();
 
-  // 👀 Watch image input and update preview
   const imageFile = watch("image");
-  if (imageFile?.[0] && !previewImage) {
-    const fileReader = new FileReader();
-    fileReader.onload = () => setPreviewImage(fileReader.result);
-    fileReader.readAsDataURL(imageFile[0]);
-  }
+  const imageUrlInput = watch("imageUrl");
+
+  // 🔁 Preview logic wrapped inside useEffect
+  useEffect(() => {
+    if (imageFile?.[0]) {
+      const reader = new FileReader();
+      reader.onload = () => setPreviewImage(reader.result);
+      reader.readAsDataURL(imageFile[0]);
+    } else if (imageUrlInput) {
+      setPreviewImage(imageUrlInput);
+    } else {
+      setPreviewImage(null);
+    }
+  }, [imageFile, imageUrlInput]);
 
   const onSubmit = async (data) => {
     setApiError("");
@@ -34,7 +42,12 @@ const CreateNews = () => {
       formData.append("subTitle", data.subtitle);
       formData.append("content", data.article);
       formData.append("category", data.category);
-      formData.append("image", data.image[0]);
+
+      if (data.image?.[0]) {
+        formData.append("image", data.image[0]);
+      } else if (data.imageUrl?.trim()) {
+        formData.append("imageUrl", data.imageUrl.trim());
+      }
 
       const res = await axios.post(
         "http://localhost:5000/news/createNews",
@@ -47,11 +60,10 @@ const CreateNews = () => {
         }
       );
 
+      console.log("News created:", res.data);
       navigate("/");
-      console.log(res.data);
     } catch (error) {
       const message = error.response?.data?.message || error.message;
-      console.log("Error creating news:", message);
       setApiError(message);
     }
   };
@@ -70,7 +82,7 @@ const CreateNews = () => {
             <input
               type="text"
               {...register("title", { required: "Title is required" })}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="input input-bordered w-full"
               placeholder="Enter Title"
             />
             {errors.title && (
@@ -86,7 +98,7 @@ const CreateNews = () => {
             <textarea
               rows={2}
               {...register("subtitle", { required: "Sub Title is required" })}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="textarea textarea-bordered w-full"
               placeholder="Enter Sub Title"
             ></textarea>
             {errors.subtitle && (
@@ -104,7 +116,7 @@ const CreateNews = () => {
             <textarea
               rows={6}
               {...register("article", { required: "News Article is required" })}
-              className="w-full px-4 py-2 border rounded resize-y focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="textarea textarea-bordered w-full"
               placeholder="Enter News Article"
             ></textarea>
             {errors.article && (
@@ -121,7 +133,7 @@ const CreateNews = () => {
             </label>
             <select
               {...register("category", { required: "Category is required" })}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="select select-bordered w-full"
             >
               <option value="">Select a category</option>
               <option value="Sports">Sports</option>
@@ -131,6 +143,7 @@ const CreateNews = () => {
               <option value="Crime">Crime</option>
               <option value="Finance">Finance</option>
               <option value="Food">Food</option>
+              <option value="Travel">Travel</option>
             </select>
             {errors.category && (
               <p className="text-sm text-red-500 mt-1">
@@ -139,29 +152,42 @@ const CreateNews = () => {
             )}
           </div>
 
-          {/* Image Upload with Preview */}
+          {/* Upload Image */}
           <div className="mb-4">
-            <label className="label">Upload Image</label>
+            <label className="block mb-1 text-sm font-medium">
+              Upload Image
+            </label>
             <input
               type="file"
               accept="image/*"
-              {...register("image", { required: "Image is required" })}
+              {...register("image")}
               className="file-input file-input-bordered w-full"
             />
-            {errors.image && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.image.message}
-              </p>
-            )}
+          </div>
 
-            {previewImage && (
+          {/* OR Paste Image URL */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm font-medium">
+              Or Paste Image URL
+            </label>
+            <input
+              type="text"
+              {...register("imageUrl")}
+              className="input input-bordered w-full"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+
+          {/* Preview Image */}
+          {previewImage && (
+            <div className="mb-4">
               <img
                 src={previewImage}
                 alt="Preview"
-                className="w-40 h-28 object-cover mt-2 rounded"
+                className="w-40 h-28 object-cover rounded"
               />
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Submit */}
           <button
