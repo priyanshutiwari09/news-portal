@@ -10,11 +10,39 @@ const axios = require("axios");
 // controller/news.controller.js
 const cloudinary = require("../utils/cloudinary.js");
 
+// const cloudinary = require("../utils/cloudinary"); // ensure this path is correct
+
 exports.createNews = async (req, res) => {
-  const { title, subTitle, content, category } = req.body;
+  const {
+    title,
+    subTitle,
+    content,
+    category,
+    imageUrl: imageUrlFromBody
+  } = req.body;
 
   try {
-    const imageUrl = req.file?.path; // Cloudinary returns full URL
+    let imageUrl = "";
+
+    // Case 1: Upload to Cloudinary if file provided
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "mern-news"
+      });
+      imageUrl = result.secure_url;
+    }
+    // Case 2: Use image URL from body (pasted)
+    else if (imageUrlFromBody && imageUrlFromBody.trim()) {
+      imageUrl = imageUrlFromBody.trim();
+    }
+
+    // Validate image existence
+    if (!imageUrl) {
+      return res
+        .status(400)
+        .json({ message: "Image is required (upload or URL)." });
+    }
+
     const news = new News({
       title,
       subTitle,
@@ -23,8 +51,8 @@ exports.createNews = async (req, res) => {
       imageUrl,
       createdBy: req.user.id
     });
-    await news.save();
 
+    await news.save();
     res.status(201).json({ message: "News Created", news });
   } catch (err) {
     res.status(400).json({ message: "Creation Failed", error: err.message });
@@ -94,33 +122,53 @@ exports.getNewsById = async (req, res) => {
   }
 };
 
+// const cloudinary = require("cloudinary").v2; // Make sure cloudinary is configured properly
+
 exports.updateNews = async (req, res) => {
   try {
+    // 1. Find the news item
     const news = await News.findById(req.params.id);
     if (!news) return res.status(404).json({ message: "News not found" });
 
+    // 2. Authorization check
     if (news.createdBy.toString() !== req.user.id)
       return res.status(403).json({ message: "Unauthorized" });
 
-    const { title, subTitle, category, content } = req.body;
+    // 3. Extract fields from body
+    const {
+      title,
+      subTitle,
+      category,
+      content,
+      imageUrl: imageUrlFromBody
+    } = req.body;
 
     let imageUrl = news.imageUrl;
+
+    // 4. Handle image upload
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "mern-news"
       });
       imageUrl = result.secure_url;
+    } else if (imageUrlFromBody && imageUrlFromBody.trim()) {
+      imageUrl = imageUrlFromBody.trim();
     }
 
+    // 5. Update fields (only if provided)
     news.title = title || news.title;
     news.subTitle = subTitle || news.subTitle;
     news.category = category || news.category;
     news.content = content || news.content;
     news.imageUrl = imageUrl;
 
+    // 6. Save updated document
     await news.save();
+
+    // 7. Respond
     res.json({ message: "News Updated", news });
   } catch (err) {
+    console.error("Update failed:", err);
     res.status(400).json({ message: "Update Failed", error: err.message });
   }
 };
