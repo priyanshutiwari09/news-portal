@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"; // ✅ Toaster import
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -24,11 +25,14 @@ const SignUp = () => {
         confirmPassword: data.confirmPassword
       });
 
+      toast.success("Signup successful!"); // ✅ Toast success
       navigate("/");
     } catch (err) {
       const message = err.response?.data?.message || "Signup failed. Try again";
       setApiError(message);
+      toast.error(message); // ✅ Toast error
     }
+
     console.log("Form Data:", data);
   };
 
@@ -46,12 +50,12 @@ const SignUp = () => {
               {...register("name", {
                 required: "Name is required",
                 pattern: {
-                  value: /^[a-zA-Z\s]+$/, // allows only letters and spaces
+                  value: /^[a-zA-Z\s]+$/,
                   message: "Invalid name format"
                 }
               })}
               className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Enter email"
+              placeholder="Enter name"
             />
             {errors.name && (
               <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
@@ -90,7 +94,7 @@ const SignUp = () => {
               {...register("password", {
                 required: "Password is required",
                 minLength: {
-                  value: 5,
+                  value: 6,
                   message: "Password must be at least 6 characters"
                 }
               })}
@@ -138,7 +142,7 @@ const SignUp = () => {
             </label>
           </div>
 
-          {/* Sign Up Button */}
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
@@ -147,10 +151,15 @@ const SignUp = () => {
           </button>
         </form>
 
+        {/* Optional inline API error */}
+        {apiError && (
+          <p className="text-sm text-red-500 text-center mt-4">{apiError}</p>
+        )}
+
         {/* Social login and links */}
         <div className="mt-6 text-center">
           <p className="text-sm mb-2">
-            Already member?{" "}
+            Already a member?{" "}
             <a href="#" className="text-blue-600 hover:underline">
               Login
             </a>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext.jsx";
+import toast from "react-hot-toast"; // ✅ Toaster import
 
 const Login = () => {
   const { login } = useAuth();
@@ -21,14 +22,15 @@ const Login = () => {
         email: data.email,
         password: data.password
       });
+
       login(res.data.token, res.data.user);
+      toast.success("Login successful!"); // ✅ Toast success
       navigate("/");
     } catch (err) {
       const message = err.response?.data?.message || "Login failed. Try again.";
       setApiError(message);
+      toast.error(message); // ✅ Toast error
     }
-    // handle login here (e.g. API call)
-    // 
   };
 
   return (
@@ -69,7 +71,7 @@ const Login = () => {
               {...register("password", {
                 required: "Password is required",
                 minLength: {
-                  value: 5,
+                  value: 6,
                   message: "Password must be at least 6 characters"
                 }
               })}
@@ -106,6 +108,11 @@ const Login = () => {
             Sign in
           </button>
         </form>
+
+        {/* Optional inline API error */}
+        {apiError && (
+          <p className="text-sm text-red-500 text-center mt-4">{apiError}</p>
+        )}
 
         {/* Social login */}
         <div className="mt-6 text-center">

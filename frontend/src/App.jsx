@@ -22,6 +22,7 @@ import Advertise from "./components/layout/Advertise";
 import Terms from "./components/layout/Terms";
 import Privacy from "./components/layout/Privacy";
 import Cookies from "./components/layout/Cookies";
+import { Toaster } from "react-hot-toast";
 
 // import "mdb-react-ui-kit/dist/css/mdb.min.css";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -71,7 +72,12 @@ function Layout() {
 }
 
 function App() {
-  return <Layout />;
+  return (
+    <>
+      <Toaster position="top-right" reverseOrder={false} />
+      <Layout />
+    </>
+  );
 }
 
 export default App;
