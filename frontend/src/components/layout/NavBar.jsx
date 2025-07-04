@@ -3,6 +3,7 @@ import { useAuth } from "../../auth/AuthContext.jsx";
 import { RiMenu2Fill } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa6";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const NavBar = () => {
   const { user, token, login, logout } = useAuth();
@@ -108,6 +109,7 @@ const NavBar = () => {
               );
               if (confirmed) {
                 logout();
+                toast.success("You have been logged out!");
               }
             }}
             className="btn border-none bg-none textarea-lg hover:bg-black hover:text-white"
@@ -147,6 +149,7 @@ const NavBar = () => {
                 );
                 if (confirmed) {
                   logout();
+                  toast.success("You have been logged out!");
                 }
               }}
             >
