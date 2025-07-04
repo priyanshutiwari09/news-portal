@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../auth/AuthContext.jsx";
+import toast from "react-hot-toast"; // ✅ Import toast
 
 const EditNews = () => {
   const { id } = useParams();
@@ -64,10 +65,12 @@ const EditNews = () => {
         }
       });
 
+      toast.success("News updated successfully!"); // ✅ toast on success
       navigate("/MyNews");
     } catch (err) {
+      const message = err.response?.data?.message || "Failed to update news.";
+      toast.error(message); // ✅ toast on error
       console.error(err);
-      alert("Failed to update news.");
     }
   };
 
@@ -79,7 +82,6 @@ const EditNews = () => {
       <h2 className="text-2xl font-bold mb-4">Edit News</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Title */}
         <div>
           <label className="label">Title</label>
           <input
@@ -92,7 +94,6 @@ const EditNews = () => {
           )}
         </div>
 
-        {/* SubTitle */}
         <div>
           <label className="label">Sub Title</label>
           <input
@@ -102,7 +103,6 @@ const EditNews = () => {
           />
         </div>
 
-        {/* Category */}
         <div>
           <label className="label">Category</label>
           <select
@@ -124,7 +124,6 @@ const EditNews = () => {
           )}
         </div>
 
-        {/* Content */}
         <div>
           <label className="label">Content</label>
           <textarea
@@ -136,7 +135,6 @@ const EditNews = () => {
           )}
         </div>
 
-        {/* Image Upload */}
         <div>
           <label className="label">Change Image (optional)</label>
           <input
@@ -153,7 +151,6 @@ const EditNews = () => {
           />
         </div>
 
-        {/* Image URL Input */}
         <div>
           <label className="label">Or paste Image URL</label>
           <input
@@ -165,7 +162,6 @@ const EditNews = () => {
           />
         </div>
 
-        {/* Preview Image */}
         {previewImage && (
           <img
             src={previewImage}
@@ -174,7 +170,6 @@ const EditNews = () => {
           />
         )}
 
-        {/* Buttons */}
         <div className="flex justify-end gap-3">
           <button
             type="button"

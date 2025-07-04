@@ -1,8 +1,9 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../auth/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import toast from "react-hot-toast"; // ✅ Toaster import
 
 const CreateNews = () => {
   const { token } = useAuth();
@@ -20,7 +21,6 @@ const CreateNews = () => {
   const imageFile = watch("image");
   const imageUrlInput = watch("imageUrl");
 
-  // 🔁 Preview logic wrapped inside useEffect
   useEffect(() => {
     if (imageFile?.[0]) {
       const reader = new FileReader();
@@ -60,11 +60,12 @@ const CreateNews = () => {
         }
       );
 
-      console.log("News created:", res.data);
+      toast.success("News created successfully!"); // ✅ Toast success
       navigate("/");
     } catch (error) {
       const message = error.response?.data?.message || error.message;
       setApiError(message);
+      toast.error(message); // ✅ Toast error
     }
   };
 
