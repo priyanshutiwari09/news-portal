@@ -3,6 +3,8 @@ const User = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const crypto = require("crypto");
+const sendEmail = require("../utils/sendEmail.js");
 dotenv.config();
 
 exports.signup = async (req, res) => {
@@ -106,5 +108,59 @@ exports.profile = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  console.log("Received forgot password request for:", email);
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.log("User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    user.resetToken = token;
+    user.tokenExpiry = Date.now() + 3600000;
+    await user.save();
+
+    const resetLink = `http://localhost:5173/reset-password/${token}`;
+    console.log("Reset link:", resetLink);
+
+    // Temporarily replace real email with log
+    // await sendEmail(email, "Reset Password", `Click: ${resetLink}`);
+    console.log("Send email to:", email);
+
+    res.json({ message: "Reset link sent." });
+  } catch (err) {
+    console.error("Error in forgotPassword:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetToken: token,
+      tokenExpiry: { $gt: Date.now() }
+    });
+
+    if (!user)
+      return res.status(400).json({ message: "Invalid or expired token" });
+
+    user.password = password;
+    user.resetToken = undefined;
+    user.tokenExpiry = undefined;
+    await user.save();
+
+    res.json({ message: "Password reset successful. You can now login." });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to reset password" });
   }
 };
