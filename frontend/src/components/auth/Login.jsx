@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext.jsx";
 import toast from "react-hot-toast"; // ✅ Toaster import
 
@@ -95,9 +95,12 @@ const Login = () => {
               />
               <span className="text-sm">Remember me</span>
             </label>
-            <a href="#" className="text-sm text-blue-500 hover:underline">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-blue-500 hover:underline"
+            >
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           {/* Submit */}
@@ -118,9 +121,9 @@ const Login = () => {
         <div className="mt-6 text-center">
           <p className="text-sm mb-2">
             Not a member?{" "}
-            <a href="#" className="text-blue-600 hover:underline">
+            <Link to="/SignUp" className="text-blue-600 hover:underline">
               Register
-            </a>
+            </Link>
           </p>
           <p className="text-sm mb-2">or sign up with:</p>
           <div className="flex justify-center gap-4 mt-2">

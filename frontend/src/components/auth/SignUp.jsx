@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast"; // ✅ Toaster import
 
 const SignUp = () => {
@@ -94,7 +94,7 @@ const SignUp = () => {
               {...register("password", {
                 required: "Password is required",
                 minLength: {
-                  value: 6,
+                  value: 5,
                   message: "Password must be at least 6 characters"
                 }
               })}
@@ -160,9 +160,9 @@ const SignUp = () => {
         <div className="mt-6 text-center">
           <p className="text-sm mb-2">
             Already a member?{" "}
-            <a href="#" className="text-blue-600 hover:underline">
+            <Link to="/login" className="text-blue-600 hover:underline">
               Login
-            </a>
+            </Link>
           </p>
           <p className="text-sm mb-2">or sign up with:</p>
           <div className="flex justify-center gap-4 mt-2">

@@ -23,6 +23,8 @@ import Terms from "./components/layout/Terms";
 import Privacy from "./components/layout/Privacy";
 import Cookies from "./components/layout/Cookies";
 import { Toaster } from "react-hot-toast";
+import ForgotPassword from "./components/auth/ForgetPassword";
+import ResetPassword from "./components/auth/ResetPassword";
 
 // import "mdb-react-ui-kit/dist/css/mdb.min.css";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -65,6 +67,9 @@ function Layout() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/cookies" element={<Cookies />} />
+
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
       </div>
     </div>
