@@ -31,9 +31,9 @@ import ResetPassword from "./components/auth/ResetPassword";
 function Layout() {
   const location = useLocation();
   const hideLayout =
-    location.pathname === "/login" ||
-    location.pathname === "/SignUp" ||
-    location.pathname === "/CreateNews";
+    ["/login", "/SignUp", "/CreateNews", "/forgot-password"].includes(
+      location.pathname
+    ) || location.pathname.startsWith("/reset-password");
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
