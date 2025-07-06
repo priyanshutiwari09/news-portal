@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail.js");
+const resetPasswordTemplate = require("../utils/emailTemplates/resetPasswordTemplate");
 dotenv.config();
 
 exports.signup = async (req, res) => {
@@ -131,7 +132,11 @@ exports.forgotPassword = async (req, res) => {
     console.log("Reset link:", resetLink);
 
     // Temporarily replace real email with log
-    // await sendEmail(email, "Reset Password", `Click: ${resetLink}`);
+    await sendEmail(
+      email,
+      "Reset Your Password",
+      resetPasswordTemplate(user.name, resetLink) // ✅ use template
+    );
     console.log("Send email to:", email);
 
     res.json({ message: "Reset link sent." });
@@ -145,22 +150,29 @@ exports.resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
 
+  console.log("🧪 Token:", token);
+  console.log("🧪 Password:", password);
+
   try {
     const user = await User.findOne({
       resetToken: token,
       tokenExpiry: { $gt: Date.now() }
     });
 
-    if (!user)
+    if (!user) {
       return res.status(400).json({ message: "Invalid or expired token" });
+    }
 
-    user.password = password;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
     user.resetToken = undefined;
     user.tokenExpiry = undefined;
+
     await user.save();
 
-    res.json({ message: "Password reset successful. You can now login." });
+    res.json({ message: "Password reset successful" });
   } catch (err) {
+    console.error("❌ Reset error:", err.message);
     res.status(500).json({ message: "Failed to reset password" });
   }
 };
