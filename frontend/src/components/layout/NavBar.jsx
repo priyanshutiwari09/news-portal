@@ -10,7 +10,7 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="navbar pl-5 pr-5 bg-base-100 h-[80px] shadow-sm">
+    <div className="navbar bg-white text-black pl-5 pr-5 bg-base-100 h-[80px] shadow-sm">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -33,7 +33,7 @@ const NavBar = () => {
           <ul
             tabIndex={0}
             // dropdown-content
-            className="menu menu-sm dropdown-content font-medium text-md gap-2  bg-base-100 rounded-box z-1 mt-3 w-40 p-2 shadow"
+            className="menu bg-white text-black menu-sm dropdown-content font-medium text-md gap-2  bg-base-100 rounded-box z-1 mt-3 w-40 p-2 shadow"
           >
             <Link
               to="/"
@@ -132,13 +132,13 @@ const NavBar = () => {
       </div>
       {/* small */}
 
-      <div className="lg:hidden navbar-end  dropdown dropdown-end">
+      <div className="lg:hidden  navbar-end  dropdown dropdown-end">
         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
           <FaRegUser className="text-xl" />
         </div>
         <ul
           tabIndex={0}
-          className="dropdown-content mt-30 menu bg-base-100 rounded-box shadow z-10 w-35 p-3"
+          className="dropdown-content bg-white text-black mt-30 menu bg-base-100 rounded-box shadow z-10 w-35 p-3"
         >
           {token ? (
             <div

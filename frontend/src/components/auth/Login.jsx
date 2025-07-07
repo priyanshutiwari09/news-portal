@@ -36,6 +36,15 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded shadow">
+        <div className="relative">
+          <button
+            onClick={() => navigate("/")}
+            className="absolute top-0 left-0 mt- ml- text-gray-600 hover:text-red-600 hover:cursor-pointer text-xl font-bold focus:outline-none"
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
         <h2 className="text-2xl font-bold mb-6 text-center">Sign in</h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>

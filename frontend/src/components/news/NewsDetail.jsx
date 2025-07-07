@@ -99,7 +99,9 @@ const NewsDetail = () => {
       <div className="flex justify-center min-h-screen p-4">
         <div className="w-full max-w-4xl bg-white p-6 space-y-6 rounded shadow">
           {/* Headline */}
-          <h1 className="text-4xl font-semibold text-gray-800">{news.title}</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-800">
+            {news.title}
+          </h1>
 
           {/* Meta Row */}
           <div className="flex justify-between text-sm text-gray-600">

@@ -6,6 +6,8 @@
 
 body {
   font-family: Roboto, Helvetica, Arial, sans-serif;
+  background-color: white;
+  color: black;
 }
 
 .list-rows {
