@@ -83,7 +83,7 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
-    console.log(token);
+    // console.log(token);
     res.status(200).json({
       message: "User Login Successful",
       token,
@@ -114,12 +114,12 @@ exports.profile = async (req, res) => {
 
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
-  console.log("Received forgot password request for:", email);
+  // console.log("Received forgot password request for:", email);
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      console.log("User not found");
+      // console.log("User not found");
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -129,7 +129,7 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     const resetLink = `http://localhost:5173/reset-password/${token}`;
-    console.log("Reset link:", resetLink);
+    // console.log("Reset link:", resetLink);
 
     // Temporarily replace real email with log
     await sendEmail(
@@ -137,7 +137,7 @@ exports.forgotPassword = async (req, res) => {
       "Reset Your Password",
       resetPasswordTemplate(user.name, resetLink) // ✅ use template
     );
-    console.log("Send email to:", email);
+    // console.log("Send email to:", email);
 
     res.json({ message: "Reset link sent." });
   } catch (err) {
@@ -150,8 +150,8 @@ exports.resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
 
-  console.log("🧪 Token:", token);
-  console.log("🧪 Password:", password);
+  // console.log("🧪 Token:", token);
+  // console.log("🧪 Password:", password);
 
   try {
     const user = await User.findOne({

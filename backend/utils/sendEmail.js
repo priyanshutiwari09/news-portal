@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const sendEmail = async (to, subject, html) => {
-  console.log("📬 sendEmail() called for:", to); // Debug log
+  // console.log("📬 sendEmail() called for:", to); // Debug log
 
   try {
     const transporter = nodemailer.createTransport({
@@ -18,7 +18,7 @@ const sendEmail = async (to, subject, html) => {
 
     // 🔍 Verify transporter connection
     await transporter.verify();
-    console.log("✅ Gmail SMTP connection verified!");
+    // console.log("✅ Gmail SMTP connection verified!");
 
     const mailOptions = {
       from: `"Last24 News" <${process.env.EMAIL_DUMMY}>`, // ✅ custom sender name
@@ -28,8 +28,8 @@ const sendEmail = async (to, subject, html) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Email sent successfully!");
-    console.log("📨 Server response:", info.response); // should include "250 OK"
+    // console.log("✅ Email sent successfully!");
+    // console.log("📨 Server response:", info.response); // should include "250 OK"
   } catch (error) {
     console.error("❌ Email sending failed:", error.message);
   }

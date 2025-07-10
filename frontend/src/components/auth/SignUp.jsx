@@ -33,7 +33,7 @@ const SignUp = () => {
       toast.error(message); // ✅ Toast error
     }
 
-    console.log("Form Data:", data);
+    // console.log("Form Data:", data);
   };
 
   return (

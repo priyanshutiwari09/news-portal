@@ -14,7 +14,7 @@ const MyNews = () => {
   useEffect(() => {
     const fetchMyNews = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/news/my-news", {
+        const res = await axios.get("http://localhost:5000/news/admin/my-articles", {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -40,7 +40,7 @@ const MyNews = () => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5000/news/${id}`, {
+      await axios.delete(`http://localhost:5000/news/article/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMyNews((prev) => prev.filter((item) => item._id !== id));

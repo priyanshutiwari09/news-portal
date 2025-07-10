@@ -24,7 +24,7 @@ const EditNews = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/news/${id}`);
+        const res = await axios.get(`http://localhost:5000/news/article/${id}`);
         const { title, subTitle, content, imageUrl, category } = res.data;
 
         setValue("title", title);
@@ -87,7 +87,7 @@ const EditNews = () => {
           <input
             type="text"
             {...register("title", { required: "Title is required" })}
-            className="input input-bordered w-full"
+            className="input  bg-gray-300 input-bordered w-full"
           />
           {errors.title && (
             <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -99,7 +99,7 @@ const EditNews = () => {
           <input
             type="text"
             {...register("subTitle")}
-            className="input input-bordered w-full"
+            className="input  bg-gray-300 input-bordered w-full"
           />
         </div>
 
@@ -107,7 +107,7 @@ const EditNews = () => {
           <label className="label">Category</label>
           <select
             {...register("category", { required: "Category is required" })}
-            className="select select-bordered w-full"
+            className="select  bg-gray-300 select-bordered w-full"
           >
             <option value="">Select a category</option>
             <option value="Sports">Sports</option>
@@ -128,7 +128,7 @@ const EditNews = () => {
           <label className="label">Content</label>
           <textarea
             {...register("content", { required: "Content is required" })}
-            className="textarea textarea-bordered w-full h-32"
+            className="textarea  bg-gray-300 textarea-bordered w-full h-32"
           />
           {errors.content && (
             <p className="text-sm text-red-500">{errors.content.message}</p>
@@ -141,7 +141,7 @@ const EditNews = () => {
             type="file"
             accept="image/*"
             {...register("image")}
-            className="file-input file-input-bordered w-full"
+            className="file-input  bg-gray-300 file-input-bordered w-full"
             onChange={(e) => {
               const file = e.target.files[0];
               if (file) {
@@ -157,7 +157,7 @@ const EditNews = () => {
             type="text"
             {...register("imageUrl")}
             placeholder="https://example.com/image.jpg"
-            className="input input-bordered w-full"
+            className="input  bg-gray-300 input-bordered w-full"
             onChange={(e) => setPreviewImage(e.target.value)}
           />
         </div>
@@ -166,7 +166,7 @@ const EditNews = () => {
           <img
             src={previewImage}
             alt="Preview"
-            className="w-40 h-28 object-cover mt-2 rounded"
+            className="w-40  h-28 object-cover mt-2 rounded"
           />
         )}
 

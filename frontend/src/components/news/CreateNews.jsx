@@ -50,7 +50,7 @@ const CreateNews = () => {
       }
 
       const res = await axios.post(
-        "http://localhost:5000/news/createNews",
+        "http://localhost:5000/news/create-news",
         formData,
         {
           headers: {
@@ -79,11 +79,11 @@ const CreateNews = () => {
         <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
           {/* Title */}
           <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium">Title</label>
+            <label className="block mb-1  text-sm font-medium">Title</label>
             <input
               type="text"
               {...register("title", { required: "Title is required" })}
-              className="input input-bordered w-full"
+              className="input bg-gray-300 input-bordered w-full"
               placeholder="Enter Title"
             />
             {errors.title && (
@@ -99,7 +99,7 @@ const CreateNews = () => {
             <textarea
               rows={2}
               {...register("subtitle", { required: "Sub Title is required" })}
-              className="textarea textarea-bordered w-full"
+              className="textarea bg-gray-300 textarea-bordered w-full"
               placeholder="Enter Sub Title"
             ></textarea>
             {errors.subtitle && (
@@ -117,7 +117,7 @@ const CreateNews = () => {
             <textarea
               rows={6}
               {...register("article", { required: "News Article is required" })}
-              className="textarea textarea-bordered w-full"
+              className="textarea  bg-gray-300 textarea-bordered w-full"
               placeholder="Enter News Article"
             ></textarea>
             {errors.article && (
@@ -134,7 +134,7 @@ const CreateNews = () => {
             </label>
             <select
               {...register("category", { required: "Category is required" })}
-              className="select select-bordered w-full"
+              className="select  bg-gray-300 select-bordered w-full"
             >
               <option value="">Select a category</option>
               <option value="Sports">Sports</option>
@@ -154,7 +154,7 @@ const CreateNews = () => {
           </div>
 
           {/* Upload Image */}
-          <div className="mb-4">
+          <div className="mb-4 ">
             <label className="block mb-1 text-sm font-medium">
               Upload Image
             </label>
@@ -162,7 +162,7 @@ const CreateNews = () => {
               type="file"
               accept="image/*"
               {...register("image")}
-              className="file-input file-input-bordered w-full"
+              className="file-input  bg-gray-300 file-input-bordered w-full"
             />
           </div>
 
@@ -174,7 +174,7 @@ const CreateNews = () => {
             <input
               type="text"
               {...register("imageUrl")}
-              className="input input-bordered w-full"
+              className="input  bg-gray-300 input-bordered w-full"
               placeholder="https://example.com/image.jpg"
             />
           </div>

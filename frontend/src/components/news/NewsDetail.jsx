@@ -20,7 +20,7 @@ const NewsDetail = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/news/${id}`);
+        const res = await axios.get(`http://localhost:5000/news/article/${id}`);
         setNews(res.data);
       } catch (err) {
         setError("Failed to load news item.");
@@ -60,7 +60,7 @@ const NewsDetail = () => {
     try {
       if (navigator.share) {
         await navigator.share(shareData);
-        console.log("Shared successfully");
+        // console.log("Shared successfully");
       } else {
         alert("Sharing not supported in this browser.");
       }
@@ -76,7 +76,7 @@ const NewsDetail = () => {
     setSummarizing(true);
     try {
       const res = await axios.post(
-        `http://localhost:5000/news/${id}/summarize`,
+        `http://localhost:5000/news/summarize/${id}`,
         {
           content: news.content
         }
