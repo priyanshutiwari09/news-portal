@@ -37,10 +37,11 @@ app.use("/news", newsRoute);
 
 // ✅ Serve frontend (SPA support)
 // ✅ CORRECT: Go one level up to get the frontend folder
-app.use(express.static(path.join(__dirname, "frontend/dist")));
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
+
 
 
 // Start server
