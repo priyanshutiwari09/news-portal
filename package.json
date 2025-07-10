@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-  "dev": "nodemon backend/server.js",     
-  "start": "node backend/server.cjs",        
+  "start": "node backend/server.cjs",
+  "dev": "nodemon backend/server.cjs",
   "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
 },
   "keywords": [],
