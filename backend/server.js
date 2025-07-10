@@ -36,11 +36,11 @@ app.use("/user", userRoute);
 app.use("/news", newsRoute);
 
 // ✅ Serve frontend (SPA support)
-// ❌ DON'T redefine __dirname — it's already available in CommonJS
-app.use(express.static(path.join(__dirname, "/frontend/dist")));
+// ✅ CORRECT: Go one level up to get the frontend folder
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/frontend/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
 // Start server
