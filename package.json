@@ -2,9 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
+  "type": "commonjs",
   "scripts": {
-  "start": "node backend/server.cjs",
-  "dev": "nodemon backend/server.cjs",
+  "start": "node backend/server.js",
+  "dev": "nodemon backend/server.js",
   "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
 },
   "keywords": [],

@@ -24,7 +24,7 @@ connectDB();
 // ✅ Apply CORS middleware before any route
 app.use(
   cors({
-    origin: "http://localhost:5173" // or set to your frontend URL in production
+    origin: "http://localhost:5173" // ✅ change to your deployed frontend URL in production
   })
 );
 
@@ -36,7 +36,7 @@ app.use("/user", userRoute);
 app.use("/news", newsRoute);
 
 // ✅ Serve frontend (SPA support)
-const __dirname = path.resolve(); // correct spelling
+// ❌ DON'T redefine __dirname — it's already available in CommonJS
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
 app.get("*", (req, res) => {
