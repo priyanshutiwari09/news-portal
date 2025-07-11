@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@plugin "daisyui"; /* ✅ Add this back */
+/* @plugin "daisyui"; ✅ required in Tailwind CSS v4 */
 
 body {
   font-family: Roboto, Helvetica, Arial, sans-serif;
