@@ -37,17 +37,10 @@ app.use("/news", newsRoute);
 
 // ✅ Serve frontend (SPA support)
 // ✅ CORRECT: Go one level up to get the frontend folder
-const fs = require("fs");
-const distPath = path.join(__dirname, "public");
-
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(distPath, "index.html"));
-  });
-} else {
-  console.warn("⚠️ Frontend build not found. Skipping static file serving.");
-}
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});
 
 // Start server
 const PORT = process.env.PORT || 5000;
