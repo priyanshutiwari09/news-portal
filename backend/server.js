@@ -38,7 +38,7 @@ app.use("/news", newsRoute);
 // ✅ Serve frontend (SPA support)
 // ✅ CORRECT: Go one level up to get the frontend folder
 const fs = require("fs");
-const distPath = path.join(__dirname, "../frontend/dist");
+const distPath = path.join(__dirname, "public");
 
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
