@@ -1,22 +1,17 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-    },
-  },
+  base: "/", // ✅ this is crucial when serving from backend
   build: {
-    outDir: "../backend/public", // Adjust if needed
+    outDir: "../backend/public", // ✅ must match what you're serving from
+    emptyOutDir: true
   },
   server: {
     proxy: {
-      "/news": "http://localhost:5000",
       "/user": "http://localhost:5000",
-    },
+      "/news": "http://localhost:5000"
+    }
   }
 });
