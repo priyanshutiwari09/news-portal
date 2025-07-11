@@ -2,13 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @plugin "daisyui"; ✅ required in Tailwind CSS v4 */
-
-body {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-  background-color: white;
-  color: black;
+@layer base {
+  body {
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    background-color: white;
+    color: black;
+  }
 }
+
 
 .list-rows {
   --list-grid-cols: minmax(0, auto) 1fr;
