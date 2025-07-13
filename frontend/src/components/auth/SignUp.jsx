@@ -18,7 +18,7 @@ const SignUp = () => {
     setApiError("");
 
     try {
-      const res = await axios.post("/user/signup", {
+      const res = await axios.post("/api/user/signup", {
         name: data.name,
         email: data.email,
         password: data.password,

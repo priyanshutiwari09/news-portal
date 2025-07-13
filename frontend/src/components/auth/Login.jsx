@@ -18,7 +18,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     setApiError("");
     try {
-      const res = await axios.post("/user/login", {
+      const res = await axios.post("/api/user/login", {
         email: data.email,
         password: data.password
       });

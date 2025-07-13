@@ -24,20 +24,22 @@ connectDB();
 // ✅ Apply CORS middleware before any route
 app.use(
   cors({
-    origin: "http://localhost:5173" // ✅ change to your deployed frontend URL in production
+    origin: "http://localhost:5173", // ⚠️ Update this to your frontend Render URL for production
+    credentials: true
   })
 );
 
 // Built-in middleware for parsing JSON
 app.use(express.json());
 
-// API routes
-app.use("/user", userRoute);
-app.use("/news", newsRoute);
+// ✅ Prefix API routes
+app.use("/api/user", userRoute);
+app.use("/api/news", newsRoute);
 
-// ✅ Serve frontend (SPA support)
-// ✅ CORRECT: Go one level up to get the frontend folder
+// ✅ Serve static files (React build)
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// ✅ Fallback for SPA (React Router)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });

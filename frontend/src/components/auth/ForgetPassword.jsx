@@ -13,7 +13,7 @@ const ForgotPassword = () => {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post(
-        "/user/forgot-password",
+        "/api/user/forgot-password",
         {
           email: data.email
         }

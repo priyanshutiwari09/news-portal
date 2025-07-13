@@ -58,7 +58,7 @@ const EditNews = () => {
         formData.append("imageUrl", data.imageUrl.trim());
       }
 
-      await axios.put(`/news/${id}`, formData, {
+      await axios.put(`/api/news/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data"

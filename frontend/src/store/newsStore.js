@@ -21,7 +21,7 @@ const useNewsStore = create((set, get) => ({
     set({ loading: true, error: null });
 
     try {
-      const res = await axios.get("/news/all", {
+      const res = await axios.get("/api/news/all", {
         params: {
           category: category || undefined,
           page,

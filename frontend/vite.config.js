@@ -8,14 +8,13 @@ export default defineConfig({
   base: "/", // ✅ Needed for correct path resolution on Render/static hosting
 
   build: {
-    outDir: "dist",        // ✅ Recommended
-    emptyOutDir: true      // ✅ Clean previous build output
+    outDir: "dist", // ✅ Recommended
+    emptyOutDir: true // ✅ Clean previous build output
   },
 
   server: {
     proxy: {
-      "/user": "http://localhost:5000",
-      "/news": "http://localhost:5000"
+      "/api": "http://localhost:5000" // ✅ Updated to match backend `/api/*`
     }
   }
 });

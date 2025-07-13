@@ -20,7 +20,7 @@ const NewsDetail = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/news/article/${id}`);
+        const res = await axios.get(`/api/news/article/${id}`);
         setNews(res.data);
       } catch (err) {
         setError("Failed to load news item.");
@@ -76,7 +76,7 @@ const NewsDetail = () => {
     setSummarizing(true);
     try {
       const res = await axios.post(
-        `/news/summarize/${id}`,
+        `/api/news/summarize/${id}`,
         {
           content: news.content
         }
