@@ -1,13 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite"; // ✅ Add Tailwind plugin here
 
 export default defineConfig({
-  plugins: [react()],
-  base: "/", // ✅ Ensures correct asset paths in production
+  plugins: [react(), tailwindcss()], // ✅ Ensure Tailwind runs properly with Vite
+
+  base: "/", // ✅ Needed for correct path resolution on Render/static hosting
 
   build: {
-    outDir: "dist",        // ✅ Optional, but recommended
-    emptyOutDir: true      // ✅ Clean old builds before new one
+    outDir: "dist",        // ✅ Recommended
+    emptyOutDir: true      // ✅ Clean previous build output
   },
 
   server: {
