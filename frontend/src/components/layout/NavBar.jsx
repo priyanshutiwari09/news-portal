@@ -10,7 +10,7 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="navbar bg-white text-black pl-5 pr-5 bg-base-100 h-[80px] shadow-sm">
+    <div className="navbar bg-white text-black pl-5 pr-5 bg-base-100  lg:h-[80px] h-[70px] shadow-sm">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">

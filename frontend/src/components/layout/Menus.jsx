@@ -13,8 +13,8 @@ const Menus = () => {
     "Travel"
   ];
 
-  const navigate = useNavigate(); // ✅ Hook from react-router-dom
-  const { fetchNews, setCategory } = useNewsStore();
+  const navigate = useNavigate();
+  const { fetchNews, setCategory, category } = useNewsStore(); // ✅ get current selected category
 
   const handleClick = (item) => {
     setCategory(item);
@@ -22,9 +22,16 @@ const Menus = () => {
   };
 
   const handleHomeClick = () => {
-    setCategory(""); // Clear selected category
-    fetchNews(); // Fetch all news
-    navigate("/"); // ✅ Go to home route
+    setCategory("");
+    fetchNews();
+    navigate("/");
+  };
+
+  const getItemClass = (item) => {
+    const isActive = category === item;
+    return `py-2 px-3 font-medium cursor-pointer whitespace-nowrap ${
+      isActive ? "bg-gray-300 text-black" : "hover:bg-gray-400"
+    }`;
   };
 
   return (
@@ -32,7 +39,9 @@ const Menus = () => {
       <ul className="flex flex-nowrap overflow-x-auto w-full justify-start lg:justify-center md:justify-center px-4 scrollbar-hide">
         <li
           onClick={handleHomeClick}
-          className="hover:bg-gray-400 py-2 px-3 font-medium cursor-pointer whitespace-nowrap"
+          className={`py-2 px-3 font-medium cursor-pointer whitespace-nowrap ${
+            category === "" ? "bg-gray-300 text-black" : "hover:bg-gray-400"
+          }`}
         >
           Home
         </li>
@@ -40,9 +49,9 @@ const Menus = () => {
           <li
             key={index}
             onClick={() => handleClick(item)}
-            className="hover:bg-gray-400 py-2 px-3 font-medium cursor-pointer whitespace-nowrap"
+            className={getItemClass(item)}
           >
-            <a>{item}</a>
+            {item}
           </li>
         ))}
       </ul>
