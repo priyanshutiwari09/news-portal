@@ -40,7 +40,7 @@ const MyNews = () => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5000/news/article/${id}`, {
+      await axios.delete(`/news/article/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMyNews((prev) => prev.filter((item) => item._id !== id));

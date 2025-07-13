@@ -76,7 +76,7 @@ const NewsDetail = () => {
     setSummarizing(true);
     try {
       const res = await axios.post(
-        `http://localhost:5000/news/summarize/${id}`,
+        `/news/summarize/${id}`,
         {
           content: news.content
         }

@@ -50,7 +50,7 @@ const CreateNews = () => {
       }
 
       const res = await axios.post(
-        "http://localhost:5000/news/create-news",
+        "/news/create-news",
         formData,
         {
           headers: {
