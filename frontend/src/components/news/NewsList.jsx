@@ -4,12 +4,20 @@ import NewsCard from "./NewsCard.jsx";
 import Footer from "../layout/Footer.jsx";
 
 const NewsList = () => {
-  const { news, fetchNews, loading, error, page, totalPages, setPage } =
-    useNewsStore();
+  const {
+    news,
+    fetchNews,
+    category,
+    loading,
+    error,
+    page,
+    totalPages,
+    setPage
+  } = useNewsStore();
 
   useEffect(() => {
-    fetchNews(true); // 👈 force fetch on page change
-  }, [page]);
+    fetchNews(); // ❌ Don't force here
+  }, [page, category]); // ✅ add category too
 
   if (loading) {
     return (
