@@ -75,12 +75,9 @@ const NewsDetail = () => {
 
     setSummarizing(true);
     try {
-      const res = await axios.post(
-        `/api/news/summarize/${id}`,
-        {
-          content: news.content
-        }
-      );
+      const res = await axios.post(`/api/news/summarize/${id}`, {
+        content: news.content
+      });
       setSummary(res.data.summary);
       setAlreadySummarized(true);
     } catch (err) {
@@ -131,9 +128,6 @@ const NewsDetail = () => {
                 className="text-blue-600 cursor-pointer hover:underline"
               >
                 Share
-              </button>
-              <button className="text-blue-600 hover:underline">
-                Bookmark
               </button>
               <button
                 onClick={isPlaying ? handleStop : handlePlay}
