@@ -9,17 +9,28 @@ const useNewsStore = create(
     category: "",
     page: 1,
     totalPages: 1,
-    lastFetchedCategory: "", // ✅ added
+    lastFetchedCategory: "",
+    lastFetchedPage: 1,
 
+    // Set selected category and reset to first page
     setCategory: (cat) => set({ category: cat, page: 1 }),
 
+    // Set page for pagination
     setPage: (page) => set({ page }),
 
+    // Fetch news from server
     fetchNews: async (force = false) => {
-      const { category, page, news, lastFetchedCategory } = get();
+      const { category, page, news, lastFetchedCategory, lastFetchedPage } =
+        get();
 
-      // ✅ Only skip fetch if same category and news exists
-      if (!force && category === lastFetchedCategory && news.length > 0) return;
+      // 🛑 Skip fetching only if same category AND page AND we have data
+      if (
+        !force &&
+        category === lastFetchedCategory &&
+        page === lastFetchedPage &&
+        news.length > 0
+      )
+        return;
 
       set({ loading: true, error: null });
 
@@ -35,7 +46,8 @@ const useNewsStore = create(
         set({
           news: res.data.news,
           totalPages: res.data.totalPages || 1,
-          lastFetchedCategory: category // ✅ update tracker
+          lastFetchedCategory: category,
+          lastFetchedPage: page
         });
       } catch (err) {
         set({ error: "Failed to fetch news." });
@@ -45,7 +57,7 @@ const useNewsStore = create(
     }
   }),
   {
-    name: "news-store",
+    name: "news-store", // For persistence (if you enable middleware)
     partialize: (state) => ({
       category: state.category,
       page: state.page

@@ -8,8 +8,8 @@ const NewsList = () => {
     useNewsStore();
 
   useEffect(() => {
-    fetchNews(); // runs when page changes
-  }, [page, fetchNews]);
+    fetchNews(true); // 👈 force fetch on page change
+  }, [page]);
 
   if (loading) {
     return (
