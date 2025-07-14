@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useNewsStore from "../../store/newsStore.js";
+import { useEffect } from "react";
 
 const Menus = () => {
   const categories = [
@@ -14,16 +15,24 @@ const Menus = () => {
   ];
 
   const navigate = useNavigate();
-  const { fetchNews, setCategory, category } = useNewsStore(); // ✅ get current selected category
+  const { fetchNews, setCategory, category } = useNewsStore();
+
+  // ✅ Trigger fetch only when category changes
+  useEffect(() => {
+    fetchNews();
+  }, [category]);
 
   const handleClick = (item) => {
-    setCategory(item);
-    fetchNews();
+    if (category !== item) {
+      setCategory(item); // this will auto-trigger fetchNews due to effect
+    }
+    navigate("/");
   };
 
   const handleHomeClick = () => {
-    setCategory("");
-    fetchNews();
+    if (category !== "") {
+      setCategory(""); // reset to home news
+    }
     navigate("/");
   };
 
@@ -36,7 +45,7 @@ const Menus = () => {
 
   return (
     <div className="border-y border-gray-300 lg:mb-3">
-      <ul className="flex flex-nowrap overflow-x-auto w-full justify-start lg:justify-center md:justify-center px-4 scrollbar-hide">
+      <ul className="flex flex-nowrap overflow-x-auto w-full justify-start lg:justify-center md:justify-center px-4 no-scrollbar">
         <li
           onClick={handleHomeClick}
           className={`py-2 px-3 font-medium cursor-pointer whitespace-nowrap ${
