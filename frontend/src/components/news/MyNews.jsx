@@ -14,7 +14,7 @@ const MyNews = () => {
   useEffect(() => {
     const fetchMyNews = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/news/admin/my-articles", {
+        const res = await axios.get("/api/news/admin/my-articles", {
           headers: {
             Authorization: `Bearer ${token}`
           }
