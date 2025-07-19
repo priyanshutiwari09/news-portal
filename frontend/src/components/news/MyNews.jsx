@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext.jsx";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const MyNews = () => {
   const { token } = useAuth();
@@ -34,19 +35,21 @@ const MyNews = () => {
   }, [token]);
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm(
+    const confirmDelete = window.confirm(
       "Are you sure you want to delete this news?"
     );
-    if (!confirm) return;
+    if (!confirmDelete) return;
 
     try {
       await axios.delete(`/api/news/article/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
       setMyNews((prev) => prev.filter((item) => item._id !== id));
+      toast.success("News deleted successfully.");
     } catch (err) {
       console.error("Error deleting news:", err);
-      alert("Failed to delete news.");
+      toast.error("Failed to delete news.");
     }
   };
 

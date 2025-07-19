@@ -24,7 +24,7 @@ const EditNews = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await axios.get(`/news/article/${id}`);
+        const res = await axios.get(`/api/news/article/${id}`);
         const { title, subTitle, content, imageUrl, category } = res.data;
 
         setValue("title", title);
@@ -58,7 +58,7 @@ const EditNews = () => {
         formData.append("imageUrl", data.imageUrl.trim());
       }
 
-      await axios.put(`/api/news/${id}`, formData, {
+      await axios.put(`/api/news/article/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data"
